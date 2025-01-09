@@ -6,28 +6,31 @@ import { RootState } from "../Store/Store";
 import Auth from "../Pages/Auth/Auth";
 import Dashboard from "../Pages/DashBoard/Dashboard";
 import DashboardLayout from "../Pages/DashBoard/DashBoardOutlet/DashboardLayout";
+import React from "react";
 
 const AppRouter = () => {
   const isLoggedIn = useSelector((state: RootState) => state.User.isAuthenticated);
-  const isauth = useSelector((state: RootState) => state.User.user?.access_token)
-  const istoken = isauth ? true : false;
-  const iserror = useSelector((state: RootState) => state.User.isError)
+  const iserror = useSelector((state: RootState) => state.User.isError);
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect to DashboardLayout if logged in, else Auth */}
-        <Route path="/" element={isLoggedIn && istoken && !iserror ? <Navigate to="/dashboard" /> : <Auth />} />
+        {/* Root route: Redirect to /dashboard if logged in, otherwise render Auth */}
+        <Route
+          path="/"
+          element={isLoggedIn && iserror ? <Navigate to="/dashboard" /> : <Auth />}
+        />
 
-        {/* Private route for Dashboard */}
+        {/* Dashboard route: Protected route */}
         <Route
           path="/dashboard"
-          element={isLoggedIn && istoken &&!iserror ? <DashboardLayout /> : <Navigate to="/" />}
+          element={isLoggedIn && iserror ? <DashboardLayout /> : <Navigate to="/" />}
         >
-          {/* Default dashboard route */}
+          {/* Nested default dashboard route */}
           <Route index element={<Dashboard />} />
         </Route>
 
-        {/* Catch-all route for redirect */}
+        {/* Catch-all route: Redirect to the root */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

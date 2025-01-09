@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../Store/Store";
 import Swal from "sweetalert2"; // Import SweetAlert
 import { logout, setErrorStatus } from "../../../Store/UserSlice"; // Import logout and setErrorStatus actions
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboard } from "@fortawesome/free-solid-svg-icons";
 
 interface ProfileInfo {
   name: string;
@@ -70,7 +72,7 @@ const DasBoardOutlet: React.FC = () => {
       if (result.isConfirmed) {
         googleLogout();
         dispatch(logout()); // Dispatch logout action to reset user state
-        dispatch(setErrorStatus(false)); // Reset error status after logout
+        dispatch(setErrorStatus(true)); // Reset error status after logout
         navigate("/"); // Navigate to the homepage after logout
       }
     });
@@ -79,9 +81,11 @@ const DasBoardOutlet: React.FC = () => {
   return (
     <div>
       <nav className="bg-white text-black p-4 flex justify-between items-center">
-        <div></div>
-
-        <div className="flex items-center ml-auto">
+       <>
+       <FontAwesomeIcon icon={faClipboard} bounce size="lg" className="" />
+       <p className="text-2xl">TaskBuddy</p>
+       </>
+        <div className="flex flex-row items-center ml-auto">
           <img
             src={profileInfo?.picture || "https://via.placeholder.com/40"}
             alt={profileInfo?.name || "User"}
